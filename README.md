@@ -1,6 +1,6 @@
 # starfract
 PHP and AJAX star rating system
-	<p>AJAX star rating systems with php handler</p>
+	<p>AJAX star rating systems with php server handler</p>
 	<ul>
 		<li>Calculates cumulative average rating</li>
 		<li>Dispays fractional stars</li>
