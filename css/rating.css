@@ -1,0 +1,361 @@
+
+/*
+* jquery ajax rating system
+* Copyright 2011, Bill Pontius
+* https://github.com/elementdigital/starfract/
+* Version: 0.0.1
+* Licensed under MIT
+*/
+
+.starRating{
+	/*position:absolute;
+	top:0px;
+	left:4px;*/
+}
+/*Rating CSS*/
+	.ratingObject{
+		position:relative;
+		text-align:left;
+	}
+
+	.ratingContainer{
+		position:relative;
+		left:0;
+		top:0;
+		list-style-type:none;
+		/*border:1px solid #333;*/
+		z-index:1;
+		margin:0;
+		padding:0;
+	}
+	.ratingContainer.size15{
+		font-size:1.0em;
+		background:url('../images/bstars15.png') repeat-x 0 0;
+		height:15px;
+	}
+	.ratingContainer.size20{
+		font-size:1.3em;
+		background:url('../images/bstars20.png') repeat-x 0 0;
+		height:20px;
+	}
+	.ratingContainer.size30{
+		font-size:1.6em;
+		background:url('../images/bstars30.png') repeat-x 0 0;
+		height:30px;
+	}
+	.ratingContainer.size40{
+		font-size:2.0em;
+		background:url('../images/bstars40.png') repeat-x 0 0;
+		height:40px;
+	}
+	
+	.ratingContainer li{
+		float:left;
+	}
+	.ratingContainer.size15 li{
+		width:15px;
+		height:15px;
+	}
+	.ratingContainer.size20 li{
+		width:20px;
+		height:20px;
+	}
+	.ratingContainer.size30 li{
+		width:30px;
+		height:30px;
+	}
+	.ratingContainer.size40 li{
+		width:40px;
+		height:40px;
+	}
+	
+	.ratingContainer li.currentRating{
+		z-index:9;
+		position:absolute; 
+		display:block;
+	}
+	.ratingContainer.size15 li.currentRating{
+		background:url('../images/bstars15.png') repeat-x;
+		background-position:0 -30px;
+		height:15px;
+	}
+	.ratingContainer.size20 li.currentRating{
+		background:url('../images/bstars20.png') repeat-x;
+		background-position:0 -40px;
+		height:20px;
+	}
+	.ratingContainer.size30 li.currentRating{
+		background:url('../images/bstars30.png') repeat-x;
+		background-position:0 -60px;
+		height:30px;
+	}
+	.ratingContainer.size40 li.currentRating{
+		background:url('../images/bstars40.png') repeat-x;
+		background-position:0 -80px;
+		height:40px;
+	}
+	
+	.ratingContainer li.currentRating span{
+		display:none;
+	}
+	
+	.ratingContainer .ratingLinks{
+		position:relative;
+		margin:0;
+		padding:0;
+		list-style-type:none;
+		z-index:10;
+	}
+	
+	.ratingContainer .ratingLinks li{
+		background:none;
+		float:left;
+		/*cursor:pointer;*/
+	}
+	.ratingContainer.size15 .ratingLinks li{
+		width:15px;
+		height:15px;
+	}
+	.ratingContainer.size20 .ratingLinks li{
+		width:20px;
+		height:20px;
+	}
+	.ratingContainer.size30 .ratingLinks li{
+		width:30px;
+		height:30px;
+	}
+	.ratingContainer.size40 .ratingLinks li{
+		width:40px;
+		height:40px;
+	}
+	
+	.ratingContainer .ratingLinks li a{
+		background-color:transparent;
+		background:none;
+		display:block;
+		outline:none;
+		position:absolute;
+		z-index:40;
+	}
+	.size15 .ratingLinks li a{
+		height:15px;
+		width:15px;
+	}
+	.size20 .ratingLinks li a{
+		height:20px;
+		width:20px;
+	}
+	.size30 .ratingLinks li a{
+		height:30px;
+		width:30px;
+	}
+	.size40 .ratingLinks li a{
+		height:40px;
+		width:40px;
+	}
+	
+	.ratingContainer .ratingLinks li a:hover{
+		position:absolute;
+		top:0px;
+		left:0px;
+		z-index:20;
+	}
+	.ratingContainer.size15 .ratingLinks li a:hover{
+		background:url('../images/bstars15.png') repeat-x;
+		background-position:0 -15px;
+	}
+	.ratingContainer.size20 .ratingLinks li a:hover{
+		background:url('../images/bstars20.png') repeat-x;
+		background-position:0 -20px;
+	}
+	.ratingContainer.size30 .ratingLinks li a:hover{
+		background:url('../images/bstars30.png') repeat-x;
+		background-position:0 -30px;
+	}
+	.ratingContainer.size40 .ratingLinks li a:hover{
+		background:url('../images/bstars40.png') repeat-x;
+		background-position:0 -40px;
+	}
+	
+	.ratingContainer .ratingLinks li a span{
+		display:none;
+	}
+	
+	.ratingContainer .voted{
+		display:none;
+	}
+	
+	.ratingContainer .currentVotes{
+		display:none;
+		clear:both;
+		white-space:nowrap;
+	}
+	
+	.currentVotes{
+		display:none;
+		position:relative;
+	}
+	
+	.ratingObject .loading{
+		display:none;
+		/*position:absolute;*/
+		position:relative;
+		top:0px;
+		left:2px;
+		z-index:10;
+		color:#000;
+		font-weight:normal;
+		background:url("../images/loader_74_green_24.gif") no-repeat;
+		background-position:2px 3px;
+		/*background:url('../images/exclamationTriangle_20.png') no-repeat;*/
+		background-color:#fff;
+		border:1px solid #777;
+		padding:5px 0 5px 26px;
+		filter:alpha(opacity=80);
+		-moz-opacity:0.8;
+		-khtml-opacity: 0.8;
+		opacity: 0.8;
+
+	}
+	.ratingObject.size15 .loading{
+		font-size:1.0em;
+	}
+	.ratingObject.size20 .loading{
+		font-size:1.0em;
+	}
+	.ratingObject.size30 .loading{
+		font-size:1.0em;
+	}
+	.ratingObject.size40 .loading{
+		font-size:1.0em;
+	}
+	
+	.error{
+		position:relative;
+		/*position:absolute;*/
+		top:0;
+		left:2px;
+		background:url('../images/exclamationTriangle_20.png') no-repeat;
+		background-position:6px 4px;
+		background-color:#fff;
+		display:block;
+		border:1px solid #777;
+		/*border-top:1px solid #ff9900;
+		border-bottom:1px solid #ff9900;*/
+		padding:5px 0 5px 28px;
+		margin:0 0 0 0;
+		font-weight:normal;
+		font-size:1.0em;
+		color:#000;
+		z-index:20;
+		filter:alpha(opacity=80);
+		-moz-opacity:0.8;
+		-khtml-opacity: 0.8;
+		opacity: 0.8;
+
+	}
+	.error a{
+		font-weight:normal;
+		color:#000;
+	}
+	#photogallery #content .error a{
+		color:red;
+	}
+	/*.size15 .error{}
+	.size20 .error{}
+	.size30 .error{}
+	.size40 .error{}*/
+	
+	.success{
+		position:relative;
+		/*position:absolute;*/
+		top:0;
+		left:2px;
+		background:url('../images/checkcircle_20.png') no-repeat;
+		background-position:2px 4px;
+		background-color:#fff;
+		display:block;
+		border:1px solid #777;
+		/*border-top:1px solid #009900;
+		border-bottom:1px solid #009900;*/
+		padding:5px 0 5px 31px;
+		margin:0 0 0 0;
+		color:#000;
+		font-weight:normal;
+		font-size:1.0em;
+		z-index:20;
+		filter:alpha(opacity=80);
+		-moz-opacity:0.8;
+		-khtml-opacity: 0.8;
+		opacity: 0.8;
+		
+	}
+	
+	li a.hover10:hover{width:10px;left:10px;}
+	li a.hover15:hover{width:15px;left:15px;}
+	li a.hover20:hover{width:20px;left:20px;}
+	li a.hover25:hover{width:25px;left:25px;}
+	li a.hover30:hover{width:30px;left:30px;}
+	li a.hover35:hover{width:35px;left:35px;}
+	li a.hover40:hover{width:40px;left:40px;}
+	li a.hover45:hover{width:45px;left:45px;}
+	li a.hover50:hover{width:50px;left:50px;}
+	li a.hover55:hover{width:55px;left:55px;}
+	li a.hover60:hover{width:60px;left:60px;}
+	li a.hover65:hover{width:65px;left:65px;}
+	li a.hover70:hover{width:70px;left:70px;}
+	li a.hover75:hover{width:75px;left:75px;}
+	li a.hover80:hover{width:80px;left:80px;}
+	li a.hover85:hover{width:85px;left:85px;}
+	li a.hover90:hover{width:90px;left:90px;}
+	li a.hover95:hover{width:95px;left:95px;}
+
+	li a.hover100:hover{width:100px;left:100px;}
+	li a.hover105:hover{width:105px;left:105px;}
+	li a.hover110:hover{width:110px;left:110px;}
+	li a.hover115:hover{width:115px;left:115px;}
+	li a.hover120:hover{width:120px;left:120px;}
+	li a.hover125:hover{width:125px;left:125px;}
+	li a.hover130:hover{width:130px;left:130px;}
+	li a.hover135:hover{width:135px;left:135px;}
+	li a.hover140:hover{width:140px;left:140px;}
+	li a.hover145:hover{width:145px;left:145px;}
+	li a.hover150:hover{width:150px;left:150px;}
+	li a.hover155:hover{width:155px;left:155px;}
+	li a.hover160:hover{width:160px;left:160px;}
+	li a.hover165:hover{width:165px;left:165px;}
+	li a.hover170:hover{width:170px;left:170px;}
+	li a.hover175:hover{width:175px;left:175px;}
+	li a.hover180:hover{width:180px;left:180px;}
+	li a.hover185:hover{width:185px;left:185px;}
+	li a.hover190:hover{width:190px;left:190px;}
+	li a.hover195:hover{width:195px;left:195px;}
+
+	li a.hover200:hover{width:200px;left:200px;}
+	li a.hover205:hover{width:205px;left:205px;}
+	li a.hover210:hover{width:210px;left:210px;}
+	li a.hover215:hover{width:215px;left:215px;}
+	li a.hover220:hover{width:220px;left:220px;}
+	li a.hover225:hover{width:225px;left:225px;}
+	li a.hover230:hover{width:230px;left:230px;}
+	li a.hover235:hover{width:235px;left:235px;}
+	li a.hover240:hover{width:240px;left:240px;}
+	li a.hover245:hover{width:245px;left:245px;}
+	li a.hover250:hover{width:250px;left:250px;}
+	li a.hover255:hover{width:255px;left:255px;}
+	li a.hover260:hover{width:260px;left:260px;}
+	li a.hover265:hover{width:265px;left:265px;}
+	li a.hover270:hover{width:270px;left:270px;}
+	li a.hover275:hover{width:275px;left:275px;}
+	li a.hover280:hover{width:280px;left:280px;}
+	li a.hover285:hover{width:285px;left:285px;}
+	li a.hover290:hover{width:290px;left:290px;}
+	li a.hover295:hover{width:295px;left:295px;}
+
+	li a.hover300:hover{width:300px;left:300px;}
+	li a.hover320:hover{width:320px;left:320px;}
+	li a.hover340:hover{width:340px;left:340px;}
+	li a.hover360:hover{width:360px;left:360px;}
+	li a.hover380:hover{width:380px;left:380px;}
+
+	li a.hover400:hover{width:400px;left:400px;}
