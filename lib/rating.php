@@ -240,7 +240,7 @@ class Rating {
 								$newips = $current_values['used_ips'];
 							}
 						}
-						if($_SESSION['items'][$objectid]['multivote'] == false && $pvotes){
+						if($_SESSION['items'][$objectid]['multivote'] == false && isset($pvotes)){
 							//echo "<br>fail, multivote not allowed, vote not counted.";
 							//build, no submit
 							$error = 900;
