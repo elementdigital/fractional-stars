@@ -30,7 +30,7 @@ require('lib/rating.php');
 <body class="no-js">
 	
 	<h1>Fractional Rating System</h1>
-	<p>AJAX star rating systems with php server side AJAX handler</p>
+	<p>AJAX star rating system with php server side AJAX handler</p>
 	<ul>
 		<li>Calculates cumulative average rating</li>
 		<li>Dispays fractional stars</li>
@@ -51,16 +51,16 @@ require('lib/rating.php');
 		?>
 	</div>
 	
-<h3>Parameters</h3>
-<ul>
-	<li>itemid: (required) assign an id to the rating object</li>
-	<li>itemtype: </li>
-	<li>units: (int) how many stars to show</li>
-	<li>unitwidth: (int) square size of star images</li>
-	<li>multivote: (bool) allow users to rate multiple times per session</li>
-</ul>
-	
-<h3>Example use</h3>
+	<h3>Parameters</h3>
+	<ul>
+		<li>itemid: (required) assign an id to the rating object</li>
+		<li>itemtype: </li>
+		<li>units: (int) how many stars to show</li>
+		<li>unitwidth: (int) square size of star images</li>
+		<li>multivote: (bool) allow users to rate multiple times per session</li>
+	</ul>
+		
+	<h3>Example use</h3>
 	<p>Default, 'itemid' is always required</p>
 	<code>
 	&lt;?php echo $rating->setRatingObject("a1"); ?&gt;
@@ -89,3 +89,4 @@ require('lib/rating.php');
 	<script src="js/jquery.rating.js"></script>
 	
 </body>
+</html>
