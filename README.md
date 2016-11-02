@@ -1,4 +1,4 @@
-# starfract
+# fractional-stars
 PHP and AJAX star rating system
 	<ul>
 		<li>Calculates cumulative average rating</li>
