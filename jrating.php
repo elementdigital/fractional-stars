@@ -23,7 +23,7 @@ if(!$rating->referer){
 
 sleep(2);
 
-if(isset($_REQUEST['i']) && !empty($_REQUEST['i']) && isset($_REQUEST['v']) && !empty($_REQUEST['v']) && isset($_REQUEST['j']) && !empty($_REQUEST['j']){
+if( isset($_REQUEST['i']) && isset($_REQUEST['v']) && isset($_REQUEST['j']) ){
 	$objectid = $_REQUEST['i'];//item id
 	$votevalue = (int)$_REQUEST['v'];//vote value
 	$ajax = $_REQUEST['j'];//vote value

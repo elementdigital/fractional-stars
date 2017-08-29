@@ -68,29 +68,29 @@ class Rating {
 		$this->database['dbstring'] = $this->database['dbname'].".".$this->database['dbtable'];
 		
 		//connect
-		$this->rating_conn = mysql_connect($this->database['dbhost'], $this->database['dbuser'], $this->database['dbpass']) or die  ('Error connecting to mysql');
+		$this->rating_conn = mysqli_connect($this->database['dbhost'], $this->database['dbuser'], $this->database['dbpass']) or die  ('Error connecting to mysql');
 	}
 	
 	//database functions
 	function getCurrentRating($itemid){
-		$result = mysql_query("SELECT total_votes, total_value, used_ips FROM ".$this->database['dbstring']." WHERE id='$itemid' ")or die(" Error: ".mysql_error());
-		$num_rows = mysql_numrows($result);
+		$result = mysqli_query($this->rating_conn, "SELECT total_votes, total_value, used_ips FROM ".$this->database['dbstring']." WHERE id='$itemid' ")or die(" Error: ".mysqli_error());
+		$num_rows = mysqli_num_rows($result);
 		if($num_rows == 0){
 			//create a new row
 			$this->addNewItem($itemid);
 			//get data from the new row
-			$result = mysql_query("SELECT total_votes, total_value, used_ips FROM ".$this->database['dbstring']." WHERE id='$itemid' ")or die(" Error: ".mysql_error());
+			$result = mysqli_query($this->rating_conn, "SELECT total_votes, total_value, used_ips FROM ".$this->database['dbstring']." WHERE id='$itemid' ")or die(" Error: ".mysqli_error());
 		}
 		return $result;
 	}
 	
 	function addNewItem($itemid){
 		$sql = "INSERT INTO ".$this->database['dbstring']." (`id`,`total_votes`, `total_value`, `used_ips`) VALUES ('$itemid', '0', '0', '')";
-		$result = mysql_query($sql);
+		$result = mysqli_query($this->rating_conn, $sql);
 	}
 	
 	function previousVotes($itemid){
-		$result=mysql_num_rows(mysql_query("SELECT used_ips FROM ".$this->database['dbstring']." WHERE used_ips LIKE '%".$this->userip."%' AND id='".$itemid."' "));
+		$result=mysqli_num_rows(mysqli_query($this->rating_conn, "SELECT used_ips FROM ".$this->database['dbstring']." WHERE used_ips LIKE '%".$this->userip."%' AND id='".$itemid."' "));
 		if($result == 1){
 			$result = true;
 		}else{
@@ -214,7 +214,7 @@ class Rating {
 				$ratingobject = "<div class=\"ratingContainer1\"><div class=\"error\">session has expired! <a href=\"\">click here to refresh the gallery.</a></div></div>";
 			}else{
 				//get item info from database
-				$current_values = mysql_fetch_assoc($this->getCurrentRating($itemid));
+				$current_values = mysqli_fetch_assoc($this->getCurrentRating($itemid));
 				if(!$current_values){
 					//echo "<br>fail to get current info from database by itemid, submitRating";
 					//no build, no submit
@@ -251,7 +251,7 @@ class Rating {
 							$newvotes = $current_values['total_votes']+1;
 							$newvalue = $current_values['total_value']+(10/$_SESSION['items'][$objectid]['units'])*$votevalue;
 							//update the db
-							$result = mysql_query("UPDATE ".$this->database['dbstring']." SET total_votes='".$newvotes."', total_value='".$newvalue."', used_ips='".$newips."' WHERE id='$itemid'");
+							$result = mysqli_query($this->rating_conn, "UPDATE ".$this->database['dbstring']." SET total_votes='".$newvotes."', total_value='".$newvalue."', used_ips='".$newips."' WHERE id='$itemid'");
 							$update = true;
 							//$ratingobject = $this->createHtmlObject($objectid,$itemtype,$_SESSION['items'][$objectid]['units'],$_SESSION['items'][$objectid]['unitwidth'],$_SESSION['items'][$objectid]['multivote'],$update,$error);
 						}
@@ -282,7 +282,7 @@ class Rating {
 			//echo "<br>fail to get current info from database by itemid, createHtmlObject";
 			$error = 600;
 		}else{
-			$current_values = mysql_fetch_assoc($result);
+			$current_values = mysqli_fetch_assoc($result);
 		}
 		
 		if($current_values['total_value'] <= 0 || $current_values['total_votes'] <= 0){
