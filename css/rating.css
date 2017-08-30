@@ -1,10 +1,11 @@
-
 /*
-* jquery ajax rating system
-* Copyright 2011, Bill Pontius
-* https://github.com/elementdigital/starfract/
-* Version: 0.0.1
-* Licensed under MIT
+ * jquery ajax rating system
+ *
+ * Copyright (c) 2011, elementdigital
+ * Licensed under MIT
+ *
+ * https://github.com/elementdigital/fractional-stars/
+ * Version: 0.0.2
 */
 
 .starRating{
@@ -209,7 +210,7 @@
 		background-position:2px 3px;
 		/*background:url('../images/exclamationTriangle_20.png') no-repeat;*/
 		background-color:#fff;
-		border:1px solid #777;
+		/*border:1px solid #777;*/
 		padding:5px 0 5px 26px;
 		filter:alpha(opacity=80);
 		-moz-opacity:0.8;
@@ -239,8 +240,8 @@
 		background-position:6px 4px;
 		background-color:#fff;
 		display:block;
-		border:1px solid #777;
-		/*border-top:1px solid #ff9900;
+		/*border:1px solid #777;
+		border-top:1px solid #ff9900;
 		border-bottom:1px solid #ff9900;*/
 		padding:5px 0 5px 28px;
 		margin:0 0 0 0;
@@ -275,8 +276,8 @@
 		background-position:2px 4px;
 		background-color:#fff;
 		display:block;
-		border:1px solid #777;
-		/*border-top:1px solid #009900;
+		/*border:1px solid #777;
+		border-top:1px solid #009900;
 		border-bottom:1px solid #009900;*/
 		padding:5px 0 5px 31px;
 		margin:0 0 0 0;

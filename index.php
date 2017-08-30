@@ -1,10 +1,12 @@
 <?php
 /*
-* jquery ajax rating system
-* Copyright 2011, Bill Pontius
-* https://github.com/elementdigital/starfract/
-* Version: 0.0.1
-* Licensed under MIT
+ * jquery ajax rating system
+ *
+ * Copyright (c) 2011, elementdigital
+ * Licensed under MIT
+ *
+ * https://github.com/elementdigital/fractional-stars/
+ * Version: 0.0.2
 */
 
 require('lib/rating.php');
@@ -85,7 +87,7 @@ require('lib/rating.php');
 		<?php echo $rating->setRatingObject("a3",'demo',7,30,false); ?>
 	</div>
 	
-	<script src="js/jquery-2.1.4.min.js"></script>
+	<script src="js/jquery-3.2.1.min.js"></script>
 	<script src="js/jquery.rating.js"></script>
 	
 </body>

@@ -1,9 +1,11 @@
 /*
-* jquery ajax rating system
-* Copyright 2011, Bill Pontius
-* https://github.com/elementdigital/starfract/
-* Version: 0.0.1
-* Licensed under MIT
+ * jquery ajax rating system
+ *
+ * Copyright (c) 2011, elementdigital
+ * Licensed under MIT
+ *
+ * https://github.com/elementdigital/fractional-stars/
+ * Version: 0.0.2
 */
 
 function ajaxRating(item_id,vote_value,target){
@@ -76,7 +78,7 @@ function ajaxRating(item_id,vote_value,target){
 			//$("body").css("cursor", "auto");
 			$("body").removeAttr("style");
 		},
-		error: function(result) {  
+		error: function(result) { 
 			alert("Sorry, your rating could NOT be added, an error occured!");
 		}
 	});
