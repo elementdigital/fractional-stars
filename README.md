@@ -14,8 +14,10 @@
 * multivote: (bool) allow users to rate multiple times per session
 
 ## **Usage**
-default: 5 star object 
-> `echo $rating->setRatingObject("ID-1")`
+default params: display a 5 star rating object 
 
-default: 7 star object
-> `echo $rating->setRatingObject("ID-2", "demo", 7, 30, false)`
+`echo $rating->setRatingObject("ID-1")`
+
+custom params: display a 7 star rating object
+
+`echo $rating->setRatingObject("ID-2", "demo", 7, 30, false)`
