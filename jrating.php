@@ -1,13 +1,15 @@
 <?php
 /*
-* jquery ajax rating system
-* Copyright 2011, Bill Pontius
-* https://github.com/elementdigital/starfract/
-* Version: 0.0.1
-* Licensed under MIT
-*
-* AJAX rating submits here
-* NON JS rating submits to "rating.php"
+ * jquery ajax rating system
+ *
+ * Copyright (c) 2011, elementdigital
+ * Licensed under MIT
+ *
+ * https://github.com/elementdigital/fractional-stars/
+ * Version: 0.0.2
+ *
+ * AJAX rating submits here
+ * NON JS rating submits to "rating.php"
 */
 
 header("Cache-Control: no-cache");
