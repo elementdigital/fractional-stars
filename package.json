@@ -1,0 +1,25 @@
+{
+  "name": "fractional-stars",
+  "version": "0.0.2",
+  "description": "AJAX Rating System written in PHP, MySQL & jQuery.",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/elementdigital/fractional-stars.git"
+  },
+  "keywords": [
+    "rating"
+  ],
+  "author": "elementdigital",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/elementdigital/fractional-stars/issues"
+  },
+  "homepage": "https://github.com/elementdigital/fractional-stars#readme"
+}
