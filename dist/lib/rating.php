@@ -9,6 +9,8 @@
  * Version: 0.0.2
 */
 
+require("config/config.php");
+
 class Rating {
 	
 	#public $params = array();
@@ -51,17 +53,22 @@ class Rating {
 	}
 		
 	function setDatabase(){
+		//var_dump(FS_DB_SERVER);
+		//var_dump(FS_DB_USER);
+		//var_dump(FS_DB_NAME);
+		//exit();
+
 		//Enter database hostname (often:locathost)
-		$this->database['dbhost'] = "localhost";//local
+		$this->database['dbhost'] = FS_DB_SERVER;//local
 		
 		//Enter data base user name
-		$this->database['dbuser'] = "YOUR-DATBASE-USERNAME";//local
+		$this->database['dbuser'] = FS_DB_USER;//local
 		
 		//Enter data base user password
-		$this->database['dbpass'] = "YOUR-DATABASE-PASSWORD";
+		$this->database['dbpass'] = FS_DB_PASS;
 		
 		//Eneter your database name
-		$this->database['dbname'] = "YOUR-DATABASE-NAME";
+		$this->database['dbname'] = FS_DB_NAME;
 		
 		//default data structure uses the table name "ratings"
 		$this->database['dbtable'] = "ratings";

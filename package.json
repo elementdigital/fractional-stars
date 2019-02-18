@@ -17,12 +17,17 @@
     "rating"
   ],
   "author": "elementdigital",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "jquery": "^3.3.1"
   },
   "bugs": {
     "url": "https://github.com/elementdigital/fractional-stars/issues"
   },
-  "homepage": "https://github.com/elementdigital/fractional-stars#readme"
+  "homepage": "https://github.com/elementdigital/fractional-stars#readme",
+  "devDependencies": {
+    "grunt": "^1.0.3",
+    "grunt-contrib-copy": "^1.0.0",
+    "jit-grunt": "^0.10.0"
+  }
 }

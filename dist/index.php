@@ -27,6 +27,9 @@ require('lib/rating.php');
 
     <link href="css/rating.css" rel="stylesheet">
 
+    <script src="js/jquery.min.js"></script>
+	<script src="js/jquery.rating.js"></script>
+
 </head>
 
 <body class="no-js">
@@ -86,9 +89,6 @@ require('lib/rating.php');
 	<div class="starRating">
 		<?php echo $rating->setRatingObject("a3",'demo',7,30,false); ?>
 	</div>
-	
-	<script src="js/jquery-3.2.1.min.js"></script>
-	<script src="js/jquery.rating.js"></script>
 	
 </body>
 </html>
