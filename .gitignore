@@ -4,4 +4,6 @@
 /*.log
 /vendor/
 config.php
+rating-src.css
 gruntfile-example.js
+

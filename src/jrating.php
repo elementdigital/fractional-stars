@@ -6,7 +6,7 @@
  * Licensed under MIT
  *
  * https://github.com/elementdigital/fractional-stars/
- * Version: 0.0.2
+ * Version: 0.0.3
  *
  * AJAX rating submits here
  * NON JS rating submits to "rating.php"

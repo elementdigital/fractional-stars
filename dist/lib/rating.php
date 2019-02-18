@@ -19,7 +19,6 @@ require("config/config.php");
 
 class Rating {
 	
-	#public $params = array();
 	var $params = array();
 	
 	public $multivote = false;
@@ -52,7 +51,6 @@ class Rating {
 	}
 	
 	function setParams(){
-		//these are dead now!
 		$this->params['unitwidth'] = 30; //pixel width of rating graphic (each star)
 		$this->params['units'] = 5; //default number of units (eg. stars) to display.
 		$this->params['multivote'] = false; //if true users can rate an object multiple time per session.
@@ -112,7 +110,6 @@ class Rating {
 		return $result;
 	}
 	
-	//generic functions
 	function randomString(){
 		$randlength = 10;
 		$randcharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -133,17 +130,14 @@ class Rating {
 		if (in_array($itemid, $_SESSION['objects'])){
 			$thesekeys = array_keys($_SESSION['objects'], $itemid);
 			$keycount = count($thesekeys);
-			//if($itemkeys> 1){
-				foreach ($thesekeys as $objectid){
-					//echo $objectid.", ";
-					//we are searching for a single match
-					if($itemid == $_SESSION['items'][$objectid]['itemid']&&$units == $_SESSION['items'][$objectid]['units']&&$unitwidth == $_SESSION['items'][$objectid]['unitwidth']&&$multivote == $_SESSION['items'][$objectid]['multivote']){
-						//looking for the object key..
-						$match[] = $_SESSION['items'][$objectid]['objectid'];
-					}
+			foreach ($thesekeys as $objectid){
+				//we are searching for a single match
+				if($itemid == $_SESSION['items'][$objectid]['itemid']&&$units == $_SESSION['items'][$objectid]['units']&&$unitwidth == $_SESSION['items'][$objectid]['unitwidth']&&$multivote == $_SESSION['items'][$objectid]['multivote']){
+					//looking for the object key..
+					$match[] = $_SESSION['items'][$objectid]['objectid'];
 				}
-				$result = $match[0];
-			//}
+			}
+			$result = $match[0];
 			return $result;
 		}else{
 			return false;
@@ -247,8 +241,6 @@ class Rating {
 					$ratingobject = "<div class=\"ratingContainer1\"><div class=\"error\">session has expired! <a href=\"/photogallery/browse.php?image=".$itemid."\">click here to refresh the page.</a></div></div>";
 				}else{
 					//check if vote values are within range
-					//if(!$votevalue <= $_SESSION['items'][$objectid]['units'] && !$votevalue > 0){
-					//if(!$votevalue <= $_SESSION['items'][$objectid]['units'] || !$votevalue > 0){
 					if($votevalue > $_SESSION['items'][$objectid]['units'] || $votevalue <= 0){
 						//echo "<br>fail, vote values out of range, submitRating";
 						//build, no submit
@@ -270,7 +262,6 @@ class Rating {
 							//build, no submit
 							$error = 900;
 							$update = true;
-							//$ratingobject = $this->createHtmlObject($objectid,$itemtype,$_SESSION['items'][$objectid]['units'],$_SESSION['items'][$objectid]['unitwidth'],$_SESSION['items'][$objectid]['multivote'],$update,$error);
 						}else{
 							//build, submit
 							$newvotes = $current_values['total_votes']+1;
@@ -278,7 +269,6 @@ class Rating {
 							//update the db
 							$result = mysqli_query($this->rating_conn, "UPDATE ".$this->database['dbstring']." SET total_votes='".$newvotes."', total_value='".$newvalue."', used_ips='".$newips."' WHERE id='$itemid'");
 							$update = true;
-							//$ratingobject = $this->createHtmlObject($objectid,$itemtype,$_SESSION['items'][$objectid]['units'],$_SESSION['items'][$objectid]['unitwidth'],$_SESSION['items'][$objectid]['multivote'],$update,$error);
 						}
 					}
 					//build
@@ -340,70 +330,68 @@ class Rating {
 		//echo"<hr>";
 		
 		//NOW WE ARE READY TO ASSEMBLE OUR HTMLOBJECT
-			//create the html object
-			$ratingobject = "";
-			$ratingobject.="<div id=\"".$objectid."\" class=\"ratingObject size".$unitwidth." clearfix\">";
-			$ratingobject.="<ul class=\"ratingContainer size".$unitwidth." clearfix\" style=\"width:".$rating_totalwidth."px;\">";
-			//$ratingobject.="<li class=\"loading\" style=\"width:".$rating_totalwidth."px;height:".$unitwidth."px;\">Voting... .  .</li>";
-			if($current_rating_width > $rating_totalwidth){
-				$ratingobject.="<li class=\"currentRating\" style=\"width:".$current_rating_width."px;\"><span>".round($current_rating)."</span></li>";
-			}else{
-				$ratingobject.="<li class=\"currentRating\" style=\"width:".$current_rating_width."px;\"><span>".round($current_rating)."</span></li>";
-			}
-			$ratingobject.="<ol class=\"ratingLinks\" style=\"width:".$rating_totalwidth."px;\">";
+		//create the html object
+		$ratingobject = "";
+		$ratingobject.="<div id=\"".$objectid."\" class=\"ratingObject size".$unitwidth." clearfix\">";
+		$ratingobject.="<ul class=\"ratingContainer size".$unitwidth." clearfix\" style=\"width:".$rating_totalwidth."px;\">";
+		if($current_rating_width > $rating_totalwidth){
+			$ratingobject.="<li class=\"currentRating\" style=\"width:".$current_rating_width."px;\"><span>".round($current_rating)."</span></li>";
+		}else{
+			$ratingobject.="<li class=\"currentRating\" style=\"width:".$current_rating_width."px;\"><span>".round($current_rating)."</span></li>";
+		}
+		$ratingobject.="<ol class=\"ratingLinks\" style=\"width:".$rating_totalwidth."px;\">";
 
-			$pvotes = $this->previousVotes($itemid);
-			if(!$multivote && $pvotes){
-				//$error = 800;
-				//static, already voted
-				for($i=1; $i<$units+1; $i++){
-					//$ratingobject.="<li class=\"".$itemtype."\" style=\"width:".$rating_totalwidth."px;height:".$unitwidth."px;\">";
-					$ratingobject.="<li class=\"".$itemtype."\">";
-					$ratingobject.="<span class=\"voted\">Already Voted</span>";
-					$ratingobject.="</li>";
-				}
-			}else{
-				for($i=1; $i<$units+1; $i++){
-					$ratingobject.="<li class=\"".$itemtype."hover".$unitwidth*$i."\">";
-					//$ratingobject.="<a class=\"ajaxlink hover".$unitwidth*$i."\" style=\"width:".$unitwidth."px;height:".$unitwidth."px;\" href=\"jrating.php?t=".$itemtype."&i=".$objectid."&v=".$i."\" title=\"".$i." of ".$units."\" id=\"".$i."\" rel=\"".$objectid."\" >";
-					$ratingobject.="<a class=\"ajaxlink hover".$unitwidth*$i."\" href=\"jrating.php?t=".$itemtype."&i=".$objectid."&v=".$i."\" title=\"".$i." of ".$units."\" id=\"".$i."\" rel=\"".$objectid."\" >";
-					$ratingobject.="<span>".$i."star</span>";
-					$ratingobject.="</a>";
-					$ratingobject.="</li>";
-				}
+		$pvotes = $this->previousVotes($itemid);
+		if(!$multivote && $pvotes){
+			//$error = 800;
+			//static, already voted
+			for($i=1; $i<$units+1; $i++){
+				$ratingobject.="<li class=\"".$itemtype."\">";
+				$ratingobject.="<span class=\"voted\">Already Voted</span>";
+				$ratingobject.="</li>";
 			}
-			$ratingobject.="</ol>";
-			$ratingobject.="</ul>";
-			if($error){
-				if($error == 100){
-					$ratingobject.="<div class=\"error\">an error occured, try again!(".$error."), fail to add object by itemid, when no session, setRatingObject</div>";
-				}elseif($error == 200){
-					$ratingobject.="<div class=\"error\">an error occured, try again!(".$error."), fail to add object by itemid, when session, setRatingObject</div>";
-				}elseif($error == 300){
-					$ratingobject.="<div class=\"error\">an error occured, try again!(".$error."), fail to get item by objectid, submitRating</div>";
-				}elseif($error == 400){
-					$ratingobject.="<div class=\"error\">an error occured, try again!(".$error."), fail to get current info from database by itemid, submitRating</div>";
-				}elseif($error == 500){
-					$ratingobject.="<div class=\"error\">an error occured, try again!(".$error."), fail to get itemid by objectid, createHtmlObject</div>";
-				}elseif($error == 600){
-					$ratingobject.="<div class=\"error\">an error occured, try again!(".$error."), fail to get current info from database by itemid, createHtmlObject</div>";
-				}elseif($error == 700){
-					$ratingobject.="<div class=\"error clearfix\">values out of range! (".$error.")</div>";
-				}elseif($error == 800){
-					$ratingobject.="<div class=\"error\">Already Voted(".$error.")</div>";
-				}elseif($error == 900){
-					$ratingobject.="<div class=\"error\">Already Voted</div>";
-				}else{
-					$ratingobject.="<div class=\"error\">an error occured, try again!(".$error.")</div>";
-				}
-			}else{
-				if($update){
-					$ratingobject.="<div class=\"success\">Thanks for rating!</div>";
-				}
+		}else{
+			for($i=1; $i<$units+1; $i++){
+				$ratingobject.="<li class=\"".$itemtype."hover".$unitwidth*$i."\">";
+				$ratingobject.="<a class=\"ajaxlink hover".$unitwidth*$i."\" href=\"jrating.php?t=".$itemtype."&i=".$objectid."&v=".$i."\" title=\"".$i." of ".$units."\" id=\"".$i."\" rel=\"".$objectid."\" >";
+				$ratingobject.="<span>".$i."star</span>";
+				$ratingobject.="</a>";
+				$ratingobject.="</li>";
 			}
-			$ratingobject.="<div class=\"loading\">Rating... .  .</div>";
-			$ratingobject.="<div class=\"currentVotes\"><span class=\"rating\">".round($current_rating,2)."</span><span class=\"votes\"> in ".$current_values['total_votes']." votes</span></div>";
-			$ratingobject.="</div>";
+		}
+		$ratingobject.="</ol>";
+		$ratingobject.="</ul>";
+		//and some rediculous error handeling, #donowhatiwasthinking
+		if($error){
+			if($error == 100){
+				$ratingobject.="<div class=\"error\">an error occured, try again!(".$error."), fail to add object by itemid, when no session, setRatingObject</div>";
+			}elseif($error == 200){
+				$ratingobject.="<div class=\"error\">an error occured, try again!(".$error."), fail to add object by itemid, when session, setRatingObject</div>";
+			}elseif($error == 300){
+				$ratingobject.="<div class=\"error\">an error occured, try again!(".$error."), fail to get item by objectid, submitRating</div>";
+			}elseif($error == 400){
+				$ratingobject.="<div class=\"error\">an error occured, try again!(".$error."), fail to get current info from database by itemid, submitRating</div>";
+			}elseif($error == 500){
+				$ratingobject.="<div class=\"error\">an error occured, try again!(".$error."), fail to get itemid by objectid, createHtmlObject</div>";
+			}elseif($error == 600){
+				$ratingobject.="<div class=\"error\">an error occured, try again!(".$error."), fail to get current info from database by itemid, createHtmlObject</div>";
+			}elseif($error == 700){
+				$ratingobject.="<div class=\"error clearfix\">values out of range! (".$error.")</div>";
+			}elseif($error == 800){
+				$ratingobject.="<div class=\"error\">Already Voted(".$error.")</div>";
+			}elseif($error == 900){
+				$ratingobject.="<div class=\"error\">Already Voted</div>";
+			}else{
+				$ratingobject.="<div class=\"error\">an error occured, try again!(".$error.")</div>";
+			}
+		}else{
+			if($update){
+				$ratingobject.="<div class=\"success\">Thanks for rating!</div>";
+			}
+		}
+		$ratingobject.="<div class=\"loading\">Rating... .  .</div>";
+		$ratingobject.="<div class=\"currentVotes\"><span class=\"rating\">".round($current_rating,2)."</span><span class=\"votes\"> in ".$current_values['total_votes']." votes</span></div>";
+		$ratingobject.="</div>";
 	return $ratingobject;
 	}
 	

@@ -3,7 +3,44 @@ module.exports = function(grunt) {
 
   grunt.initConfig({
 
+    postcss: {
+      //run after copy:cssback, over writes working css
+      options: {
+        map: false,
+        processors: [
+          require('autoprefixer')({browsers: ['last 8 version']})
+        ]
+      },
+      dist: {
+        //expand: false,
+        //flatten: false,
+        src: 'src/css/rating-src.css',
+        dest: 'src/css/rating.css'
+      }
+    },
+
     copy: {
+        //coppies to src env, run before copy to dist env.
+        cssback: {
+          expand: true, 
+          cwd: 'src/css/', 
+          src: 'rating.css', 
+          dest: 'src/css/',
+          //creates a backup before we run prefix(postcss) on our working css in src directory.
+          rename: function (dest, matchedSrcPath) {
+              var splitfile = matchedSrcPath.split('.');
+              matchedSrcPath = splitfile[0]+'-src.'+splitfile[1];
+              return dest + matchedSrcPath;
+          },
+        },
+        jquerysrc: {
+          expand: true, 
+          cwd: 'node_modules/jquery/dist', 
+          src: 'jquery.min.js', 
+          dest: 'src/js'
+        },
+
+        //coppies to dist env
         phpconfig: {
           expand: true, 
           cwd: 'src/config',
@@ -28,17 +65,11 @@ module.exports = function(grunt) {
           src: '**/*',  
           dest: 'dist/css',
         },
-        jquery: {
+        js: {
           expand: true, 
-          cwd: 'node_modules/jquery/dist', 
-          src: 'jquery.min.js', 
+          cwd: 'src/js',
+          src: '**/*',  
           dest: 'dist/js',
-        },
-        index: {
-          expand: true, 
-          cwd: 'src', 
-          src: 'index.php', 
-          dest: 'dist'
         },
         jrating: {
           expand: true, 
@@ -46,21 +77,22 @@ module.exports = function(grunt) {
           src: 'jrating.php', 
           dest: 'dist'
         },
-        //coppies to src env
-        jquerysrc: {
+        index: {
           expand: true, 
-          cwd: 'node_modules/jquery/dist', 
-          src: 'jquery.min.js', 
-          dest: 'src/js'
+          cwd: 'src', 
+          src: 'index.php', 
+          dest: 'dist'
         },
     },
   });
 
   grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-postcss');
 
-  grunt.registerTask('default', ['copy:phpconfig', 'copy:phplib', 'copy:images', 'copy:css', 'copy:jquery', 'copy:jquerysrc', 'copy:jrating', 'copy:index']);
+  grunt.registerTask('default', ['copy:cssback', 'postcss', 'copy:jquerysrc', 'copy:js', 'copy:phpconfig', 'copy:phplib', 'copy:images', 'copy:css', 'copy:jrating', 'copy:index']);
 
-  grunt.registerTask('dist', ['copy:images', 'copy:phplib', 'copy:css', 'copy:jquery', 'copy:jrating', 'copy:index']);
+  grunt.registerTask('dist', ['copy:cssback', 'postcss', 'copy:jquerysrc', 'copy:js', 'copy:phpconfig', 'copy:phplib', 'copy:images', 'copy:css', 'copy:jrating', 'copy:index']);
 
-  grunt.registerTask('dev', ['copy:jquery']);
+  grunt.registerTask('dev', ['copy:cssback', 'postcss', 'copy:jquerysrc']);
+
 };
