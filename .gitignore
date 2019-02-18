@@ -3,8 +3,5 @@
 /node_modules/
 /*.log
 /vendor/
-/dist/config/
-/src/config/
 config.php
-config-example.php
 gruntfile-example.js
