@@ -128,20 +128,20 @@ if(isset($_GET["killsession"])){
 
 	<h5>Generates: 60px + 10 star + multivote + NOrounding</h5>
 	<code>
-	&lt;?php echo $rating->setRatingObject("a3", 'demo', 10, 40, true, false); ?&gt;
+	&lt;?php echo $rating->setRatingObject("a4", 'demo', 10, 40, true, false); ?&gt;
 	</code>	
 	<div class="starRating">
-		<?php echo $rating->setRatingObject("a3", 'demo', 10, 40, true, false); ?>
+		<?php echo $rating->setRatingObject("a4", 'demo', 10, 40, true, false); ?>
 	</div>
 
 	<h4>Single vote per IP/session</h4>
 	<p>Restricts voting by ip address, <a href ="?killsess=1">destroy session</a> to test. </p>
 	<p>It's cool, but the only way to ensure true single voting is by using a login system in your application.</p>
 	<code>
-	&lt;?php echo $rating->setRatingObject("a4", 'demo', 10, 30, false, true; ?&gt;
+	&lt;?php echo $rating->setRatingObject("a5", 'demo', 10, 30, false, true; ?&gt;
 	</code>
 	<div class="starRating">
-		<?php echo $rating->setRatingObject("a4", 'demo', 10, 30, false, true); ?>
+		<?php echo $rating->setRatingObject("a5", 'demo', 10, 30, false, true); ?>
 	</div>
 
 	<div class="footer">
