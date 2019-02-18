@@ -31,6 +31,7 @@ class Rating {
 	private $showdiag;
 	
 	function Rating(){
+		//session_destroy(); 
 		if(!isset($_SESSION)){
 			session_start();
 			//echo session_cache_expire();//default in PHP is usually 180 min.
@@ -53,9 +54,11 @@ class Rating {
 	function setParams(){
 		$this->params['unitwidth'] = 30; //pixel width of rating graphic (each star)
 		$this->params['units'] = 5; //default number of units (eg. stars) to display.
-		$this->params['multivote'] = false; //if true users can rate an object multiple time per session.
+		$this->params['multivote'] = true; //if true users can rate an object multiple time per session.
 		$this->params['rounding'] = false; //rounds to whole units
 		$this->params['imgpath'] = "images/";//path to images
+
+		$this->errors = array();
 	}
 		
 	function setDatabase(){
@@ -80,6 +83,12 @@ class Rating {
 		
 		//connect
 		$this->rating_conn = mysqli_connect($this->database['dbhost'], $this->database['dbuser'], $this->database['dbpass']) or die  ('Error connecting to mysql');
+	}
+
+	function destroysession(){
+		//working with sessions can be tricky! This comes in handy here.
+		session_destroy();
+		header('Location: index.php');
 	}
 	
 	//database functions
@@ -126,19 +135,23 @@ class Rating {
 		return $randstring;
 	}
 	
-	function getObjectidByItemid($itemid,$itemtype,$units,$unitwidth,$multivote){
+	function getObjectidByItemid($itemid,$itemtype,$units,$unitwidth,$multivote,$rounding){
 		if (in_array($itemid, $_SESSION['objects'])){
 			$thesekeys = array_keys($_SESSION['objects'], $itemid);
 			$keycount = count($thesekeys);
 			foreach ($thesekeys as $objectid){
 				//we are searching for a single match
-				if($itemid == $_SESSION['items'][$objectid]['itemid']&&$units == $_SESSION['items'][$objectid]['units']&&$unitwidth == $_SESSION['items'][$objectid]['unitwidth']&&$multivote == $_SESSION['items'][$objectid]['multivote']){
+				if($itemid == $_SESSION['items'][$objectid]['itemid']&&$units == $_SESSION['items'][$objectid]['units']&&$unitwidth == $_SESSION['items'][$objectid]['unitwidth']&&$multivote == $_SESSION['items'][$objectid]['multivote']&&$rounding == $_SESSION['items'][$objectid]['rounding']){
 					//looking for the object key..
 					$match[] = $_SESSION['items'][$objectid]['objectid'];
 				}
 			}
-			$result = $match[0];
-			return $result;
+			if(isset($match)){
+				$result = $match[0];
+				return $result;
+			}else{
+				return false;
+			}
 		}else{
 			return false;
 		}
@@ -153,7 +166,7 @@ class Rating {
 		return $result;
 	}
 	
-	function addObject($itemid,$itemtype,$units,$unitwidth,$multivote){
+	function addObject($itemid,$itemtype,$units,$unitwidth,$multivote,$rounding){
 		$objectid = $this->randomString();
 		$_SESSION['objects'][$objectid] = $itemid;
 		$_SESSION['items'][$objectid]['objectid'] = $objectid;
@@ -162,11 +175,12 @@ class Rating {
 		$_SESSION['items'][$objectid]['units'] = $units;
 		$_SESSION['items'][$objectid]['unitwidth'] = $unitwidth;
 		$_SESSION['items'][$objectid]['multivote'] = $multivote;
+		$_SESSION['items'][$objectid]['rounding'] = $rounding;
 		return $objectid;
 	}
 	
 	//Starts Object Creation, requested by page
-	function setRatingObject($itemid=0,$itemtype='default',$units="",$unitwidth="",$multivote="",$rounding="",$error=0){
+	function setRatingObject($itemid=0,$itemtype='default',$units="",$unitwidth="",$multivote="",$rounding=null,$error=0){
 		if(empty($units)){
 			$units = $this->params['units'];
 		}
@@ -179,8 +193,9 @@ class Rating {
 		if(empty($rounding)){
 			$rounding = $this->params['rounding'];
 		}
+		//var_dump($rounding);
 		if(!isset($_SESSION['objects']) or !isset($_SESSION['items'])){
-			$result = $this->addObject($itemid,$itemtype,$units,$unitwidth,$multivote);
+			$result = $this->addObject($itemid,$itemtype,$units,$unitwidth,$multivote,$rounding);
 			if(!$result){
 				//echo "<br>fail to add object by itemid, when no session, setRatingObject";
 				$error = 100;
@@ -189,10 +204,10 @@ class Rating {
 			}
 		}else{
 			//first check if exact item is in session
-			$result = $this->getObjectidByItemid($itemid,$itemtype,$units,$unitwidth,$multivote);
+			$result = $this->getObjectidByItemid($itemid,$itemtype,$units,$unitwidth,$multivote,$rounding);
 			if(!$result){
 				//object appears new, add it
-				$result = $this->addObject($itemid,$itemtype,$units,$unitwidth,$multivote);
+				$result = $this->addObject($itemid,$itemtype,$units,$unitwidth,$multivote,$rounding);
 				if(!$result){
 					//echo "<br>fail to add object by itemid, when session, setRatingObject";
 					$error = 200;
@@ -209,7 +224,7 @@ class Rating {
 		
 		//we are creating not updating
 		$update = false;
-		$ratingobject = $this->createHtmlObject($objectid,$itemtype,$units,$unitwidth,$multivote,$update,$error);
+		$ratingobject = $this->createHtmlObject($objectid,$itemtype,$units,$unitwidth,$multivote,$rounding,$update,$error);
 		
 		//return html object to initiating page
 		return $ratingobject;
@@ -278,14 +293,14 @@ class Rating {
 					if (!isset($error)){
 						$error = "";
 					}
-					$ratingobject = $this->createHtmlObject($objectid,$itemtype,$_SESSION['items'][$objectid]['units'],$_SESSION['items'][$objectid]['unitwidth'],$_SESSION['items'][$objectid]['multivote'],$update,$error);
+					$ratingobject = $this->createHtmlObject($objectid,$itemtype,$_SESSION['items'][$objectid]['units'],$_SESSION['items'][$objectid]['unitwidth'],$_SESSION['items'][$objectid]['multivote'],$_SESSION['items'][$objectid]['rounding'],$update,$error);
 				}
 			}
 		}
 		return $ratingobject;
 	}
 	
-	function createHtmlObject($objectid,$itemtype,$units,$unitwidth,$multivote,$update,$error){
+	function createHtmlObject($objectid,$itemtype,$units,$unitwidth,$multivote,$rounding,$update,$error){
 		$itemid = $this->getItemidByObjectid($objectid);
 		if(!$itemid){
 			//echo "<br>fail to get itemid by objectid, createHtmlObject";
@@ -306,8 +321,8 @@ class Rating {
 			$current_rating = ($current_values['total_value']/$current_values['total_votes'])/(10/$units);
 		}
 
-		if($this->params['rounding'] == true){
-			$current_rating = round($current_rating);
+		if($rounding == true){
+			$current_rating = round($current_rating, 0);
 		}
 		
 		$rating_totalwidth = $units*$unitwidth;
@@ -320,9 +335,10 @@ class Rating {
 		//echo "<br>units: ".$units;
 		//echo "<br>unitwidth: ".$unitwidth;
 		//echo "<br>multivote: ".$multivote;
+		//echo "<br>rounding: ".$rounding;
 		//echo "<br>error: ".$error;
-		//echo "<br>current_values['total_votes']: ".$current_values['total_votes'];
-		//echo "<br>current_values['total_value']: ".$current_values['total_value'];
+		//echo "<br>total_votes['total_votes']: ".$current_values['total_votes'];
+		//echo "<br>total_values['total_value']: ".$current_values['total_value'];
 		//echo "<hr>CALC.";
 		//echo "<br>current_rating: ".$current_rating;
 		//echo "<br>current_rating_width: ".$current_rating_width;
@@ -361,7 +377,7 @@ class Rating {
 		}
 		$ratingobject.="</ol>";
 		$ratingobject.="</ul>";
-		//and some rediculous error handeling, #donowhatiwasthinking
+		//and some rediculous error handeling, ? :-/ ? 
 		if($error){
 			if($error == 100){
 				$ratingobject.="<div class=\"error\">an error occured, try again!(".$error."), fail to add object by itemid, when no session, setRatingObject</div>";
@@ -386,10 +402,10 @@ class Rating {
 			}
 		}else{
 			if($update){
-				$ratingobject.="<div class=\"success\">Thanks for rating!</div>";
+				$ratingobject.="<div class=\"success\"><span>Thanks for rating!</span></div>";
 			}
 		}
-		$ratingobject.="<div class=\"loading\">Rating... .  .</div>";
+		$ratingobject.="<div class=\"loading\"><span>Rating... .  .</span></div>";
 		$ratingobject.="<div class=\"currentVotes\"><span class=\"rating\">".round($current_rating,2)."</span><span class=\"votes\"> in ".$current_values['total_votes']." votes</span></div>";
 		$ratingobject.="</div>";
 	return $ratingobject;

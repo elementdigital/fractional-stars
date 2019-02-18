@@ -22,3 +22,12 @@ default params: display a 5 star rating object
 custom params: display a 7 star rating object
 
 `echo $rating->setRatingObject("ID-2", "demo", 7, 30, true, false)`
+
+## **Install**
+* Download or git
+* run npm install
+* create your database and run ratings.sql to create "ratings" table.
+* copy "config/config-example.php" to "config/config.php"
+* set your DB settings in "config/config.php"
+* run grunt
+* browse

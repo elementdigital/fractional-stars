@@ -29,6 +29,9 @@
     "grunt": "^1.0.3",
     "grunt-contrib-copy": "^1.0.0",
     "grunt-postcss": "^0.9.0",
+    "autoprefixer": "^9.4.7",
+    "cssnano": "^4.1.10",
+    "pixrem": "^5.0.0",
     "jit-grunt": "^0.10.0"
   }
 }

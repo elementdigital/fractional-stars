@@ -8,7 +8,7 @@ module.exports = function(grunt) {
       options: {
         map: false,
         processors: [
-          require('autoprefixer')({browsers: ['last 8 version']})
+          require('autoprefixer')({browsers: ['last 2 version']})
         ]
       },
       dist: {
