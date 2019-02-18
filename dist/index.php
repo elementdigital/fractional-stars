@@ -51,18 +51,20 @@ require('lib/rating.php');
 			$itemtype = 'test',
 			$units = 10,
 			$unitwidth = 20,
-			$multivote = true
+			$multivote = true,
+			$rounding = true
 		); 
 		?>
 	</div>
 	
 	<h3>Parameters</h3>
 	<ul>
-		<li>itemid: (required) assign an id to the rating object</li>
-		<li>itemtype: </li>
+		<li>itemid: *required (string) assign an id to the rating object</li>
+		<li>itemtype: (string) additional identifier</li>
 		<li>units: (int) how many stars to show</li>
 		<li>unitwidth: (int) square size of star images</li>
 		<li>multivote: (bool) allow users to rate multiple times per session</li>
+		<li>rounding: (bool) rounds average to whole units (ex. 4.6=5)</li>
 	</ul>
 		
 	<h3>Example use</h3>
@@ -71,23 +73,23 @@ require('lib/rating.php');
 	&lt;?php echo $rating->setRatingObject("a1"); ?&gt;
 	</code>
 	<div class="starRating">
-		<?php echo $rating->setRatingObject("a1"); ?>
+		<?php echo $rating->setRatingObject("a1", 'demo', 5, 30, true, true); ?>
 	</div>
 	
 	<p>Custom Params</p>
 	<code>
-	&lt;?php echo $rating->setRatingObject("a2",'demo',5,40,true); ?&gt;
+	&lt;?php echo $rating->setRatingObject("a2", 'demo', 5, 40, true, true); ?&gt;
 	</code>	
 	<div class="starRating">
-		<?php echo $rating->setRatingObject("a2",'demo',5,40,true); ?>
+		<?php echo $rating->setRatingObject("a2", 'demo', 5, 40, true, true); ?>
 	</div>
 	
-	<p>Single vote per IP</p>
+	<p>Single vote per IP/session</p>
 	<code>
-	&lt;?php echo $rating->setRatingObject("a3",'demo',7,30,false); ?&gt;
+	&lt;?php echo $rating->setRatingObject("a3", 'demo', 7,30, true, false; ?&gt;
 	</code>
 	<div class="starRating">
-		<?php echo $rating->setRatingObject("a3",'demo',7,30,false); ?>
+		<?php echo $rating->setRatingObject("a3", 'demo', 7, 30, false, true); ?>
 	</div>
 	
 </body>

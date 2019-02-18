@@ -6,8 +6,14 @@
  * Licensed under MIT
  *
  * https://github.com/elementdigital/fractional-stars/
- * Version: 0.0.2
+ * Version: 0.0.3
 */
+
+//check if config file exists
+if( !file_exists("config/config.php") ){
+	echo "<h1>Configuration Error</h1><h2>could not find configuration file.</h2><h3>".$_SERVER['DOCUMENT_ROOT']."/config/config.php</h3>  <p>You probably need to copy \"config/config-example.php\" to \"config/config.php\" and configure your database settings in \"config.php\"</p>";
+	exit();
+}
 
 require("config/config.php");
 
@@ -47,16 +53,14 @@ class Rating {
 	
 	function setParams(){
 		//these are dead now!
-		$this->params['unitwidth'] = 20; //pixel width of rating graphic
-		$this->params['units'] = 10; //default number of units (eg. stars) to display
+		$this->params['unitwidth'] = 30; //pixel width of rating graphic (each star)
+		$this->params['units'] = 5; //default number of units (eg. stars) to display.
+		$this->params['multivote'] = false; //if true users can rate an object multiple time per session.
+		$this->params['rounding'] = false; //rounds to whole units
 		$this->params['imgpath'] = "images/";//path to images
 	}
 		
 	function setDatabase(){
-		//var_dump(FS_DB_SERVER);
-		//var_dump(FS_DB_USER);
-		//var_dump(FS_DB_NAME);
-		//exit();
 
 		//Enter database hostname (often:locathost)
 		$this->database['dbhost'] = FS_DB_SERVER;//local
@@ -168,7 +172,19 @@ class Rating {
 	}
 	
 	//Starts Object Creation, requested by page
-	function setRatingObject($itemid=0,$itemtype='default',$units=5,$unitwidth=30,$multivote='true',$error=0){
+	function setRatingObject($itemid=0,$itemtype='default',$units="",$unitwidth="",$multivote="",$rounding="",$error=0){
+		if(empty($units)){
+			$units = $this->params['units'];
+		}
+		if(empty($unitwidth)){
+			$unitwidth = $this->params['unitwidth'];
+		}
+		if(empty($multivote)){
+			$multivote = $this->params['multivote'];
+		}
+		if(empty($rounding)){
+			$rounding = $this->params['rounding'];
+		}
 		if(!isset($_SESSION['objects']) or !isset($_SESSION['items'])){
 			$result = $this->addObject($itemid,$itemtype,$units,$unitwidth,$multivote);
 			if(!$result){
@@ -298,6 +314,10 @@ class Rating {
 			$current_rating = 0;
 		}else{
 			$current_rating = ($current_values['total_value']/$current_values['total_votes'])/(10/$units);
+		}
+
+		if($this->params['rounding'] == true){
+			$current_rating = round($current_rating);
 		}
 		
 		$rating_totalwidth = $units*$unitwidth;
