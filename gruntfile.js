@@ -77,10 +77,10 @@ module.exports = function(grunt) {
           src: 'jrating.php', 
           dest: 'dist'
         },
-        index: {
+        example: {
           expand: true, 
           cwd: 'src', 
-          src: 'index.php', 
+          src: 'example.php', 
           dest: 'dist'
         },
     },
@@ -89,7 +89,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-postcss');
 
-  grunt.registerTask('default', ['copy:cssback', 'postcss', 'copy:jquerysrc', 'copy:js', 'copy:phpconfig', 'copy:phplib', 'copy:images', 'copy:css', 'copy:jrating', 'copy:index']);
+  grunt.registerTask('default', ['copy:cssback', 'postcss', 'copy:jquerysrc', 'copy:js', 'copy:phpconfig', 'copy:phplib', 'copy:images', 'copy:css', 'copy:jrating', 'copy:example']);
 
   grunt.registerTask('dist', ['copy:cssback', 'postcss', 'copy:jquerysrc', 'copy:js', 'copy:phpconfig', 'copy:phplib', 'copy:images', 'copy:css', 'copy:jrating', 'copy:index']);
 

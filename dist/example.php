@@ -66,14 +66,14 @@ if(isset($_GET["killsession"])){
 
 <body class="no-js">
 	
-	<h1>Fractional Rating System</h1>
+	<h1>Fractional Stars Rating System</h1>
 	<h2>AJAX Rating System written in PHP, MySQL & jQuery</h2>
 	<ul>
 		<li>Calculates cumulative average rating</li>
 		<li>Dispays fractional stars</li>
 		<li>Multiple objects on a single page</li>
 		<li>Works in No JS environment</li>
-		<li>Includes server side AJAX handler</li>
+		<li>Easy to integrate into your own applications</li>
 	</ul>
 	
 	<div class="starRating">
@@ -118,24 +118,24 @@ if(isset($_GET["killsession"])){
 		<?php echo $rating->setRatingObject("a2", 'demo', 5, 30, true, true); ?>
 	</div>
 
-	<h5>Generates: 30px + 7 star + multivote + NOrounding</h5>
+	<h5>Generates: 40px + 7 star + multivote + NOrounding</h5>
 	<code>
-	&lt;?php echo $rating->setRatingObject("a3", 'demo', 7, 30, true, false); ?&gt;
+	&lt;?php echo $rating->setRatingObject("a3", 'demo', 7, 40, true, false); ?&gt;
 	</code>	
 	<div class="starRating">
-		<?php echo $rating->setRatingObject("a3", 'demo', 7, 30, true, false); ?>
+		<?php echo $rating->setRatingObject("a3", 'demo', 7, 40, true, false); ?>
 	</div>
 
-	<h5>Generates: 60px + 10 star + multivote + NOrounding</h5>
+	<h5>Generates: 50px + 10 star + multivote + NOrounding</h5>
 	<code>
-	&lt;?php echo $rating->setRatingObject("a4", 'demo', 10, 40, true, false); ?&gt;
+	&lt;?php echo $rating->setRatingObject("a4", 'demo', 10, 50, true, false); ?&gt;
 	</code>	
 	<div class="starRating">
-		<?php echo $rating->setRatingObject("a4", 'demo', 10, 40, true, false); ?>
+		<?php echo $rating->setRatingObject("a4", 'demo', 10, 50, true, false); ?>
 	</div>
 
 	<h4>Single vote per IP/session</h4>
-	<p>Restricts voting by ip address, <a href ="?killsess=1">destroy session</a> to test. </p>
+	<p>Restricts voting by ip address, <a href ="?killsession=1">destroy session</a> to test. </p>
 	<p>It's cool, but the only way to ensure true single voting is by using a login system in your application.</p>
 	<code>
 	&lt;?php echo $rating->setRatingObject("a5", 'demo', 10, 30, false, true; ?&gt;
