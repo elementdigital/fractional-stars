@@ -49,6 +49,11 @@
 	background:url('../images/bstars40.png') repeat-x 0 0;
 	height:40px;
 }
+.ratingContainer.size50{
+	font-size:2.0em;
+	background:url('../images/bstars50.png') repeat-x 0 0;
+	height:50px;
+}
 
 .ratingContainer li{
 	float:left;
@@ -68,6 +73,10 @@
 .ratingContainer.size40 li{
 	width:40px;
 	height:40px;
+}
+.ratingContainer.size50 li{
+	width:50px;
+	height:50px;
 }
 
 .ratingContainer li.currentRating{
@@ -94,6 +103,11 @@
 	background:url('../images/bstars40.png') repeat-x;
 	background-position:0 -80px;
 	height:40px;
+}
+.ratingContainer.size50 li.currentRating{
+	background:url('../images/bstars50.png') repeat-x;
+	background-position:0 -100px;
+	height:50px;
 }
 
 .ratingContainer li.currentRating span{
@@ -129,6 +143,10 @@
 	width:40px;
 	height:40px;
 }
+.ratingContainer.size50 .ratingLinks li{
+	width:50px;
+	height:50px;
+}
 
 .ratingContainer .ratingLinks li a{
 	background-color:transparent;
@@ -154,6 +172,10 @@
 	height:40px;
 	width:40px;
 }
+.size50 .ratingLinks li a{
+	height:50px;
+	width:50px;
+}
 
 .ratingContainer .ratingLinks li a:hover{
 	position:absolute;
@@ -176,6 +198,10 @@
 .ratingContainer.size40 .ratingLinks li a:hover{
 	background:url('../images/bstars40.png') repeat-x;
 	background-position:0 -40px;
+}
+.ratingContainer.size50 .ratingLinks li a:hover{
+	background:url('../images/bstars50.png') repeat-x;
+	background-position:0 -50px;
 }
 
 .ratingContainer .ratingLinks li a span{
@@ -236,6 +262,9 @@
 	font-size:1.0em;
 }
 .ratingObject.size40 .loading{
+	font-size:1.0em;
+}
+.ratingObject.size50 .loading{
 	font-size:1.0em;
 }
 
@@ -364,7 +393,11 @@ li a.hover295:hover{width:295px;left:295px;}
 li a.hover300:hover{width:300px;left:300px;}
 li a.hover320:hover{width:320px;left:320px;}
 li a.hover340:hover{width:340px;left:340px;}
+li a.hover350:hover{width:350px;left:350px;}
 li a.hover360:hover{width:360px;left:360px;}
 li a.hover380:hover{width:380px;left:380px;}
 
 li a.hover400:hover{width:400px;left:400px;}
+li a.hover450:hover{width:450px;left:450px;}
+li a.hover500:hover{width:500px;left:500px;}
+li a.hover550:hover{width:550px;left:550px;}

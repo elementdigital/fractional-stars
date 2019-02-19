@@ -11,7 +11,7 @@
 
 //check if config file exists
 if( !file_exists("config/config.php") ){
-	echo "<h1>Configuration Error</h1><h2>could not find configuration file.</h2><h3>".$_SERVER['DOCUMENT_ROOT']."/config/config.php</h3>  <p>You probably need to copy \"config/config-example.php\" to \"config/config.php\" and configure your database settings in \"config.php\"</p>";
+	echo "<h1>Configuration Error</h1><h2>Fractional-Stars application could not find the configuration file.</h2><h3>config/config.php</h3>  <p>You probably need to copy \"config/config-example.php\" to \"config/config.php\" and configure your database settings in \"config.php\"</p>";
 	exit();
 }
 
@@ -87,8 +87,13 @@ class Rating {
 
 	function destroysession(){
 		//working with sessions can be tricky! This comes in handy here.
-		session_destroy();
-		header('Location: index.php');
+		//var_dump(session_name());
+		//session_destroy();
+		unset($_SESSION['fsrs_objects']);
+		unset($_SESSION['fsrs_items']);
+		//var_dump($_SESSION);
+		header("Location: ".$_SERVER['PHP_SELF']);
+		exit();
 	}
 	
 	//database functions
@@ -127,8 +132,8 @@ class Rating {
 			$randstring .= $randcharacters[mt_rand(0, strlen($randcharacters)-1)];
 		}
 		
-		if(isset($_SESSION['objects'])){
-			if (array_key_exists($randstring, $_SESSION['objects'])){
+		if(isset($_SESSION['fsrs_objects'])){
+			if (array_key_exists($randstring, $_SESSION['fsrs_objects'])){
 				randomString();
 			}
 		}
@@ -136,14 +141,14 @@ class Rating {
 	}
 	
 	function getObjectidByItemid($itemid,$itemtype,$units,$unitwidth,$multivote,$rounding){
-		if (in_array($itemid, $_SESSION['objects'])){
-			$thesekeys = array_keys($_SESSION['objects'], $itemid);
+		if (in_array($itemid, $_SESSION['fsrs_objects'])){
+			$thesekeys = array_keys($_SESSION['fsrs_objects'], $itemid);
 			$keycount = count($thesekeys);
 			foreach ($thesekeys as $objectid){
 				//we are searching for a single match
-				if($itemid == $_SESSION['items'][$objectid]['itemid']&&$units == $_SESSION['items'][$objectid]['units']&&$unitwidth == $_SESSION['items'][$objectid]['unitwidth']&&$multivote == $_SESSION['items'][$objectid]['multivote']&&$rounding == $_SESSION['items'][$objectid]['rounding']){
+				if($itemid == $_SESSION['fsrs_items'][$objectid]['itemid']&&$units == $_SESSION['fsrs_items'][$objectid]['units']&&$unitwidth == $_SESSION['fsrs_items'][$objectid]['unitwidth']&&$multivote == $_SESSION['fsrs_items'][$objectid]['multivote']&&$rounding == $_SESSION['fsrs_items'][$objectid]['rounding']){
 					//looking for the object key..
-					$match[] = $_SESSION['items'][$objectid]['objectid'];
+					$match[] = $_SESSION['fsrs_items'][$objectid]['objectid'];
 				}
 			}
 			if(isset($match)){
@@ -158,8 +163,8 @@ class Rating {
 	}
 	
 	function getItemidByObjectid($objectid){
-		if (array_key_exists($objectid, $_SESSION['objects'])){
-			$result = $_SESSION['objects'][$objectid];
+		if (array_key_exists($objectid, $_SESSION['fsrs_objects'])){
+			$result = $_SESSION['fsrs_objects'][$objectid];
 		}else{
 			$result = false;
 		}
@@ -168,14 +173,14 @@ class Rating {
 	
 	function addObject($itemid,$itemtype,$units,$unitwidth,$multivote,$rounding){
 		$objectid = $this->randomString();
-		$_SESSION['objects'][$objectid] = $itemid;
-		$_SESSION['items'][$objectid]['objectid'] = $objectid;
-		$_SESSION['items'][$objectid]['itemid'] = $itemid;
-		$_SESSION['items'][$objectid]['itemtype'] = $itemtype;
-		$_SESSION['items'][$objectid]['units'] = $units;
-		$_SESSION['items'][$objectid]['unitwidth'] = $unitwidth;
-		$_SESSION['items'][$objectid]['multivote'] = $multivote;
-		$_SESSION['items'][$objectid]['rounding'] = $rounding;
+		$_SESSION['fsrs_objects'][$objectid] = $itemid;
+		$_SESSION['fsrs_items'][$objectid]['objectid'] = $objectid;
+		$_SESSION['fsrs_items'][$objectid]['itemid'] = $itemid;
+		$_SESSION['fsrs_items'][$objectid]['itemtype'] = $itemtype;
+		$_SESSION['fsrs_items'][$objectid]['units'] = $units;
+		$_SESSION['fsrs_items'][$objectid]['unitwidth'] = $unitwidth;
+		$_SESSION['fsrs_items'][$objectid]['multivote'] = $multivote;
+		$_SESSION['fsrs_items'][$objectid]['rounding'] = $rounding;
 		return $objectid;
 	}
 	
@@ -194,7 +199,7 @@ class Rating {
 			$rounding = $this->params['rounding'];
 		}
 		//var_dump($rounding);
-		if(!isset($_SESSION['objects']) or !isset($_SESSION['items'])){
+		if(!isset($_SESSION['fsrs_objects']) or !isset($_SESSION['fsrs_items'])){
 			$result = $this->addObject($itemid,$itemtype,$units,$unitwidth,$multivote,$rounding);
 			if(!$result){
 				//echo "<br>fail to add object by itemid, when no session, setRatingObject";
@@ -232,7 +237,7 @@ class Rating {
 	
 	function submitRating($objectid,$votevalue){
 		//check is session exists
-		if(!isset($_SESSION['objects']) or !isset($_SESSION['items'])){
+		if(!isset($_SESSION['fsrs_objects']) or !isset($_SESSION['fsrs_items'])){
 			//echo "<br>FAIL! session has expired!";
 			//no build, no submit
 			//we might want to refresh the page automaticaly
@@ -256,7 +261,7 @@ class Rating {
 					$ratingobject = "<div class=\"ratingContainer1\"><div class=\"error\">session has expired! <a href=\"/photogallery/browse.php?image=".$itemid."\">click here to refresh the page.</a></div></div>";
 				}else{
 					//check if vote values are within range
-					if($votevalue > $_SESSION['items'][$objectid]['units'] || $votevalue <= 0){
+					if($votevalue > $_SESSION['fsrs_items'][$objectid]['units'] || $votevalue <= 0){
 						//echo "<br>fail, vote values out of range, submitRating";
 						//build, no submit
 						$error = 700;
@@ -272,7 +277,7 @@ class Rating {
 								$newips = $current_values['used_ips'];
 							}
 						}
-						if($_SESSION['items'][$objectid]['multivote'] == false && isset($pvotes)){
+						if($_SESSION['fsrs_items'][$objectid]['multivote'] == false && isset($pvotes)){
 							//echo "<br>fail, multivote not allowed, vote not counted.";
 							//build, no submit
 							$error = 900;
@@ -280,7 +285,7 @@ class Rating {
 						}else{
 							//build, submit
 							$newvotes = $current_values['total_votes']+1;
-							$newvalue = $current_values['total_value']+(10/$_SESSION['items'][$objectid]['units'])*$votevalue;
+							$newvalue = $current_values['total_value']+(10/$_SESSION['fsrs_items'][$objectid]['units'])*$votevalue;
 							//update the db
 							$result = mysqli_query($this->rating_conn, "UPDATE ".$this->database['dbstring']." SET total_votes='".$newvotes."', total_value='".$newvalue."', used_ips='".$newips."' WHERE id='$itemid'");
 							$update = true;
@@ -293,7 +298,7 @@ class Rating {
 					if (!isset($error)){
 						$error = "";
 					}
-					$ratingobject = $this->createHtmlObject($objectid,$itemtype,$_SESSION['items'][$objectid]['units'],$_SESSION['items'][$objectid]['unitwidth'],$_SESSION['items'][$objectid]['multivote'],$_SESSION['items'][$objectid]['rounding'],$update,$error);
+					$ratingobject = $this->createHtmlObject($objectid,$itemtype,$_SESSION['fsrs_items'][$objectid]['units'],$_SESSION['fsrs_items'][$objectid]['unitwidth'],$_SESSION['fsrs_items'][$objectid]['multivote'],$_SESSION['fsrs_items'][$objectid]['rounding'],$update,$error);
 				}
 			}
 		}
