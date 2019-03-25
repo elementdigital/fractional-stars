@@ -30,7 +30,8 @@ class Rating {
 	private $userip;
 	private $showdiag;
 	
-	function Rating(){
+	//function Rating(){
+	function __construct(){ //php7 constructor
 		//session_destroy(); 
 		if(!isset($_SESSION)){
 			session_start();

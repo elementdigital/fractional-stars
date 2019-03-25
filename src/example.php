@@ -134,15 +134,16 @@ if(isset($_GET["killsession"])){
 		<?php echo $rating->setRatingObject("a4", 'demo', 10, 50, true, false); ?>
 	</div>
 
-	<h4>Single vote per IP/session</h4>
-	<p>Restricts voting by ip address, <a href ="?killsession=1">destroy session</a> to test. </p>
-	<p>It's cool, but the only way to ensure true single voting is by using a login system in your application.</p>
+	<h3>Single vote per IP/session</h3>
+	<p>Restricts voting by ip address</p>
+	<p>( *! probably does not work on most localhost configurations ).</p>
 	<code>
 	&lt;?php echo $rating->setRatingObject("a5", 'demo', 10, 30, false, true; ?&gt;
 	</code>
 	<div class="starRating">
 		<?php echo $rating->setRatingObject("a5", 'demo', 10, 30, false, true); ?>
 	</div>
+	<p>The only way to ensure accurate single voting is by using a login system in your application.</p>
 
 	<div class="footer">
 		<p>Fractional Stars: AJAX Rating System written in PHP, MySQL & jQuery.</p>
