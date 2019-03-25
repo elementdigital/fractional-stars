@@ -18,6 +18,10 @@
 	position:relative;
 	text-align:left;
 }
+.starRating ul{
+	margin: 0px;
+	padding: 0px;
+}
 
 .ratingContainer{
 	position:relative;

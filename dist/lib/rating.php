@@ -30,7 +30,8 @@ class Rating {
 	private $userip;
 	private $showdiag;
 	
-	function Rating(){
+	//function Rating(){
+	public function __construct(){ //php7 constructor
 		//session_destroy(); 
 		if(!isset($_SESSION)){
 			session_start();
@@ -51,11 +52,16 @@ class Rating {
 		$this->setDatabase();
 	}
 	
+	public function Rating(){
+        // PHP4 constructor bkwd compatibility
+        self::__construct();
+    }
+
 	function setParams(){
 		$this->params['unitwidth'] = 30; //pixel width of rating graphic (each star)
 		$this->params['units'] = 5; //default number of units (eg. stars) to display.
 		$this->params['multivote'] = true; //if true users can rate an object multiple time per session.
-		$this->params['rounding'] = false; //rounds to whole units
+		$this->params['rounding'] = true; //rounds to whole units
 		$this->params['imgpath'] = "images/";//path to images
 
 		$this->errors = array();
@@ -64,10 +70,10 @@ class Rating {
 	function setDatabase(){
 
 		//Enter database hostname (often:locathost)
-		$this->database['dbhost'] = FS_DB_SERVER;//local
+		$this->database['dbhost'] = FS_DB_SERVER;
 		
 		//Enter data base user name
-		$this->database['dbuser'] = FS_DB_USER;//local
+		$this->database['dbuser'] = FS_DB_USER;
 		
 		//Enter data base user password
 		$this->database['dbpass'] = FS_DB_PASS;
@@ -185,17 +191,17 @@ class Rating {
 	}
 	
 	//Starts Object Creation, requested by page
-	function setRatingObject($itemid=0,$itemtype='default',$units="",$unitwidth="",$multivote="",$rounding=null,$error=0){
+	function setRatingObject($itemid=0,$itemtype='default',$units="",$unitwidth="",$multivote=null,$rounding=null,$error=0){
 		if(empty($units)){
 			$units = $this->params['units'];
 		}
 		if(empty($unitwidth)){
 			$unitwidth = $this->params['unitwidth'];
 		}
-		if(empty($multivote)){
+		if(!is_bool($multivote) && $multivote == null){
 			$multivote = $this->params['multivote'];
 		}
-		if(empty($rounding)){
+		if(!is_bool($rounding) && $rounding == null){
 			$rounding = $this->params['rounding'];
 		}
 		//var_dump($rounding);
@@ -339,13 +345,13 @@ class Rating {
 		//echo "<br>itemtype: ".$itemtype;
 		//echo "<br>units: ".$units;
 		//echo "<br>unitwidth: ".$unitwidth;
-		//echo "<br>multivote: ".$multivote;
-		//echo "<br>rounding: ".$rounding;
+		//echo "<br>multivote: ".($multivote ? 'true' : 'false');
+		//echo "<br>rounding: ".($rounding ? 'true' : 'false');
 		//echo "<br>error: ".$error;
 		//echo "<br>total_votes['total_votes']: ".$current_values['total_votes'];
 		//echo "<br>total_values['total_value']: ".$current_values['total_value'];
 		//echo "<hr>CALC.";
-		//echo "<br>current_rating: ".$current_rating;
+		//echo "<br>current_rating: ".round($current_rating, 2)." of ".$units." | ".round(($current_rating/$units)*100, 1)."%";
 		//echo "<br>current_rating_width: ".$current_rating_width;
 		//echo "<br>rating_totalwidth: ".$rating_totalwidth;
 		//echo"<hr>";
