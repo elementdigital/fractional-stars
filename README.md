@@ -30,4 +30,4 @@ custom params: display a 7 star rating object
 * copy "config/config-example.php" to "config/config.php"
 * set your DB settings in "config/config.php"
 * run grunt
-* browse
+* browse: example.php
