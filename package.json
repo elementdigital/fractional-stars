@@ -26,7 +26,7 @@
   },
   "homepage": "https://github.com/elementdigital/fractional-stars#readme",
   "devDependencies": {
-    "autoprefixer": "^9.4.7",
+    "autoprefixer": "^9.6.1",
     "cssnano": "^4.1.10",
     "grunt": "^1.0.4",
     "grunt-contrib-copy": "^1.0.0",
