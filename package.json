@@ -19,7 +19,7 @@
   "author": "elementdigital",
   "license": "MIT",
   "dependencies": {
-    "jquery": "^3.4.1"
+    "jquery": "^3.5.0"
   },
   "bugs": {
     "url": "https://github.com/elementdigital/fractional-stars/issues"
